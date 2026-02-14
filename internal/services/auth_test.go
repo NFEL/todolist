@@ -28,7 +28,7 @@ func setupAuthTest(t *testing.T) (*AuthService, *mockRepo.MockUserRepo, *minired
 	})
 
 	userRepo := new(mockRepo.MockUserRepo)
-	authSrv := NewAuthService(userRepo, rdb, []byte("test-secret"))
+	authSrv := NewAuthService(userRepo, rdb, "test-secret")
 	if rdb == nil {
 		t.FailNow()
 	}

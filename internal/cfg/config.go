@@ -41,7 +41,7 @@ type ServerCfg struct {
 }
 
 type JWTCfg struct {
-	Secret         []byte        `mapstructure:"secret"`
+	Secret         string        `mapstructure:"secret"`
 	Timeout        time.Duration `mapstructure:"timeout"`
 	RefreshTimeout time.Duration `mapstructure:"refresh_timeout"`
 }
@@ -103,7 +103,7 @@ func loadConfig(cfgPath string, parsedFlags *pflag.FlagSet) error {
 	var C Config
 	err = v.Unmarshal(&C)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to unmarshal configs: %w", err)
 	}
 	Cfg = &C
 	return nil

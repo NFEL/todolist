@@ -47,7 +47,7 @@ func setupAuthRouter(t *testing.T) (*gin.Engine, *mockRepo.MockUserRepo, *minire
 
 	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
 	userRepo := new(mockRepo.MockUserRepo)
-	authSrv := services.NewAuthService(userRepo, rdb, []byte("test-secret"))
+	authSrv := services.NewAuthService(userRepo, rdb, "test-secret")
 
 	r := gin.New()
 	r.POST("/login", Login(authSrv))
@@ -296,7 +296,7 @@ func TestLogoutHandler_WithBearerToken(t *testing.T) {
 		Return(user, nil)
 
 	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
-	authSrv := services.NewAuthService(userRepo, rdb, []byte("test-secret"))
+	authSrv := services.NewAuthService(userRepo, rdb, "test-secret")
 
 	tokens, _ := authSrv.IssueTokens("1")
 	_ = authSrv.Persist(t.Context(), tokens)
@@ -316,7 +316,7 @@ func TestLogoutHandler_NoToken(t *testing.T) {
 
 	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
 	userRepo := new(mockRepo.MockUserRepo)
-	authSrv := services.NewAuthService(userRepo, rdb, []byte("test-secret"))
+	authSrv := services.NewAuthService(userRepo, rdb, "test-secret")
 
 	r := gin.New()
 	r.POST("/logout", Logout(authSrv))

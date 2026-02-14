@@ -23,11 +23,12 @@ type AuthService struct {
 	redis     *redis.Client
 }
 
-func NewAuthService(userRepo repository.UserRepo, redis *redis.Client, jwtSecret []byte) *AuthService {
+func NewAuthService(userRepo repository.UserRepo, redis *redis.Client, jwtSecret string) *AuthService {
+
 	return &AuthService{
 		UserRepo:  userRepo,
 		redis:     redis,
-		JwtSecret: jwtSecret,
+		JwtSecret: []byte(jwtSecret),
 	}
 }
 
