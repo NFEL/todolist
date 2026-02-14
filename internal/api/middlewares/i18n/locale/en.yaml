@@ -1,0 +1,12 @@
+OK: Success
+FAILED: Failed
+SERVER_ERROR: Server Error
+INTERNAL: Internal
+UNAVAILABLE: Unavailable
+# Authentication and authorization errors
+UNAUTHENTICATED: Unauthenticated
+PERMISSION_DENIED: Permission Denied
+ACCESS_DENIED: Access Denied
+FORBIDDEN: Forbidden
+BAD_AUTH: Invalid Authentication
+SESSION_EXPIRED: Session Expired

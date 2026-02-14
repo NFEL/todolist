@@ -53,3 +53,17 @@ Cache layer using redis for /GET endpoints
 Pagination and filtering  (status, assignee)
 
 Usage of grafana k6 to do benchmark and load test
+
+### Project Structure
+
+RestApi Port
+    |
+Routes
+    |
+Handlers
+    |
+Controller
+    |
+Repository
+    |
+Data Models

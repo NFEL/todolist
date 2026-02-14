@@ -1,0 +1,12 @@
+OK: موفق
+FAILED: شکست خورده
+SERVER_ERROR: خطای سرور
+INTERNAL: داخلی
+UNAVAILABLE: در دسترس نیست
+# Authentication and authorization errors
+UNAUTHENTICATED: احراز هویت نشده
+PERMISSION_DENIED: اجازه داده نشده
+ACCESS_DENIED: دسترسی رد شد
+FORBIDDEN: ممنوع
+BAD_AUTH: احراز هویت نامعتبر
+SESSION_EXPIRED: جلسه منقضی شده
