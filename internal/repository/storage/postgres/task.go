@@ -29,25 +29,51 @@ func (i *taskImp) Create(ctx context.Context, task *domain.Task) (uint, error) {
 	return task.ID, nil
 }
 
+func (i *taskImp) GetByID(ctx context.Context, ID uint) (domain.Task, error) {
+	return gorm.G[domain.Task](i.db).Where("id = ?", ID).Take(ctx)
+}
+
 func (i *taskImp) List(ctx context.Context, limit, offset int) ([]domain.Task, error) {
 	r := make([]domain.Task, int(math.Abs(float64(limit-offset))))
 	err := gorm.G[domain.Task](i.db).Select("*").Limit(limit).Offset(offset).Scan(ctx, &r)
 	if err != nil {
 		return nil, err
-	} else {
-		return r, nil
 	}
+	return r, nil
 }
 
-func (i *taskImp) ListByFilter(ctx context.Context, filter dto.TaskListFilter, limit, offset int) ([]domain.Task, error) {
-	q := gorm.G[domain.Task](i.db).Select("*").Limit(limit).Offset(offset)
+func (i *taskImp) ListByFilter(ctx context.Context, filter dto.TaskListFilter, limit, offset int) ([]domain.Task, int64, error) {
+	q := i.db.Model(&domain.Task{})
+
+	if filter.Status != nil {
+		q = q.Where("status = ?", *filter.Status)
+	}
+	if filter.Assignee != 0 {
+		q = q.Where("id IN (SELECT task_id FROM user_tasks WHERE user_id = ?)", filter.Assignee)
+	}
 	if !reflect.ValueOf(filter.CreatedAt).IsZero() {
 		q = q.Where("created_at >= ?", filter.CreatedAt)
 	}
-	return q.Find(ctx)
+	if !reflect.ValueOf(filter.UpdatedAt).IsZero() {
+		q = q.Where("updated_at >= ?", filter.UpdatedAt)
+	}
+
+	var total int64
+	q.Count(&total)
+
+	var tasks []domain.Task
+	if err := q.Limit(limit).Offset(offset).Find(&tasks).Error; err != nil {
+		return nil, 0, err
+	}
+	return tasks, total, nil
 }
 
-func (i *taskImp) UpdateByID(ctx context.Context, user *domain.Task, fields []string) error {
-	_, err := gorm.G[domain.Task](i.db).Where("id = ?", user.ID).Select(fields[0], fields[1:]).Updates(ctx, *user)
+func (i *taskImp) UpdateByID(ctx context.Context, task *domain.Task, fields []string) error {
+	_, err := gorm.G[domain.Task](i.db).Where("id = ?", task.ID).Select(fields[0], fields[1:]).Updates(ctx, *task)
+	return err
+}
+
+func (i *taskImp) DeleteByID(ctx context.Context, ID uint) error {
+	_, err := gorm.G[domain.Task](i.db).Where("id = ?", ID).Delete(ctx)
 	return err
 }
