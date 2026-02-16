@@ -9,13 +9,13 @@ import (
 	"os/signal"
 	"syscall"
 
+	_ "graph-interview/docs"
 	_ "net/http/pprof"
 
 	"github.com/gin-contrib/graceful"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 func genSwagHandler(baseURL string) gin.HandlerFunc {
@@ -37,7 +37,7 @@ func genSwagHandler(baseURL string) gin.HandlerFunc {
 // @version         1.0
 // @description     A RESTful Task Manager API with JWT authentication
 // @host            localhost:3154
-// @BasePath        /v1
+// @BasePath        /
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
@@ -70,9 +70,11 @@ func ServeREST(ctx context.Context) error {
 	g.Use(middlewares.AccessLogMiddleware(logger.Logger))
 
 	// OpenTelemetry tracing middleware
-	if tp != nil {
-		g.Use(otelgin.Middleware("task-manager"))
-	}
+	// if tp != nil {
+	// 	g.Use(otelgin.Middleware("task-manager"))
+	// }
+
+	_ = tp
 
 	// Health check
 	g.GET("/", func(ctx *gin.Context) {

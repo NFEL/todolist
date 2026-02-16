@@ -22,9 +22,11 @@ func bearerFromHeader(c *gin.Context) string {
 func AuthMiddleware(authSrv *services.AuthService, r *redis.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenStr, _ := c.Cookie("access_token")
+
 		if tokenStr == "" {
 			tokenStr = bearerFromHeader(c)
 		}
+
 		if tokenStr == "" {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing token"})
 			return

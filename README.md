@@ -74,6 +74,16 @@ Usage of grafana k6 to do benchmark and load test
 
 You can project with one one of following ways.
 
+But first swag files must be generated to run project.
+
+In order to generate swag files run following commands.
+
+`
+    #if swag is not in your PATH.
+    go install github.com/swaggo/swag/cmd/swag@latest
+    swag init -g ./internal/api/setup.go -o ./docs
+`
+
 #### Air ( auto reload )
 
 `
@@ -89,6 +99,8 @@ You can project with one one of following ways.
     docker compose logs -f app postgres redis
 `
 
+
+You can the visit the api documentation in <http://localhost:8000/swagger/index.html>
 
 #### Testing Project
 

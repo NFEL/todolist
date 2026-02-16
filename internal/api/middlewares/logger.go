@@ -29,7 +29,7 @@ func AccessLogMiddleware(logger *slog.Logger) gin.HandlerFunc {
 		c.Next()
 
 		defer func() {
-			logger.InfoContext(c.Request.Context(), "accesslog", "method", c.Request.Method, "status", c.Writer.Status(), "route", c.FullPath(), "resp", writer.body.String())
+			logger.InfoContext(c.Request.Context(), "accesslog", "method", c.Request.Method, "status", c.Writer.Status(), "route", c.FullPath(), "resp", writer.body.String()[:25])
 		}()
 	}
 }
